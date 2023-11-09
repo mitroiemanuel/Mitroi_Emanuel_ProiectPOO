@@ -56,7 +56,7 @@ public:
 	bool getesteAutomata() {
 		return esteAutomata;
 	}
-	
+
 	void setesteAutomata(bool esteAutomata) {
 		this->esteAutomata = esteAutomata;
 	}
@@ -90,11 +90,11 @@ public:
 			this->uleiCutie = uleiCutie;
 		}
 	}
-	
+
 	static bool getareMarsarier() {
 		return cutieViteze::areMarsarier;
 	}
-	
+
 	static void setareMarsarier(bool da) {
 		cutieViteze::areMarsarier = da;
 	}
@@ -111,14 +111,6 @@ public:
 		strcpy_s(producator, strlen(prod) + 1, prod);
 	}
 
-	//constructor de copiere;
-	/*bool esteAutomata;
-	int nrRapoarte;
-	string tipAmbreiaj;
-	char* producator;
-	const int id;
-	static bool areMarsarier;
-	float uleiCutie;*/
 	cutieViteze(const cutieViteze& c) :id(c.id) {
 		this->producator = new char[strlen(c.producator) + 1];
 		strcpy(this->producator, c.producator);
@@ -128,24 +120,52 @@ public:
 		this->areMarsarier = c.areMarsarier;
 		this->uleiCutie = c.uleiCutie;
 	}
-	/*friend ostream& operator<<(ostream& masina, const cutieViteze& cutie);*/
+	
 	friend string masinaSauUtilaj(bool areMarsarier);
 	friend string masinaSauCamion(int nrRapoarte);
+
+	friend istream& operator>>(istream& masina, cutieViteze& c) {
+		char aux[100];
+		cout << "Producatorul cutiei este: ";
+		masina >> aux;
+		if (c.producator != NULL) {
+			delete[]c.producator;
+		}
+		c.producator = new char[strlen(aux) + 1];
+		strcpy_s(c.producator, strlen(aux) + 1, aux);
+		cout << "Ulei cutie: ";
+		masina >> c.uleiCutie;
+		cout << "Numar rapoarte: ";
+		masina >> c.nrRapoarte;
+		cout << "Are marsarier 0-Nu, 1-Da: ";
+		masina >> c.areMarsarier;
+		cout << "Tip ambreiaj: ";
+		masina >> c.tipAmbreiaj;
+		cout << "Este automata 0-Nu, 1-Da: ";
+		masina >> c.esteAutomata;
+		
+
+		return masina;
+	}
+
+	friend ostream& operator<<(ostream& cutie, const cutieViteze& s) {
+		cutie << "Producator: " << s.producator << endl;;
+		cutie << "Numar rapoarte: " << s.nrRapoarte << endl;
+		cutie << "Tip ambreiaj: " << s.tipAmbreiaj << endl;
+		cutie << "Ulei cutie: " << s.uleiCutie << endl;
+		cutie << (s.areMarsarier ? "Are marsarier. " : "Nu are marsarier. ") << endl;
+		cutie << (s.esteAutomata ? "Este automata. " : "Este manuala. ") << endl;
+		return cutie;
+	}
+
+	int& operator[](int index) {
+		if (index >= 0 && index < this->nrRapoarte) {
+			return this->nrRapoarte;
+		}
+		else throw 404;
+	}
 };
 bool cutieViteze::areMarsarier = true;
-
-//ostream operator<<(ostream& masina, const cutieViteze& cutie) {
-//	masina << cutie.getid() << "." << "Producator: " << cutie.producator << endl << "Numar rapoarte: " << cutie.nrRapoarte << "Capacitate ulei: " << cutie.uleiCutie << endl << "Tip ambreiaj: " << cutie.tipAmbreiaj << endl << "Are marsarier: " << cutie.getareMarsarier << endl << "Este automata: " << cutie.esteAutomata << endl;
-//	if (cutie.nrRapoarte != NULL) {
-//		for (int i = 0; i < cutie.uleiCutie; i++) {
-//			masina << cutie.nrRapoarte[i] << " ";
-//		}
-//	else {
-//		masina << "-" << endl;
-//	}
-//	return masina;
-//	}
-//}
 
 string masinaSauUtilaj(bool areMarsarier) {
 	if (areMarsarier) {
@@ -206,25 +226,19 @@ public:
 		cout << "ID: " << id << " Motorul produs de " << producator << " are o capacitate de " << capacitate << " litri, o putere de " << putere << " cai putere, avand drept combustibil " << combustibil << (this->esteElectric ? " este electric" : " nu este electric") << " si avand un numar de " << numarPistoane << " pistoane." << endl;
 	}
 	//get si set;
-	/*char* producator;
-	int numarPistoane;
-	const int id;
-	float capacitate;
-	static bool esteElectric;
-	int putere;
-	string combustibil;*/
+	
 
-	 int getputere2() {
+	int getputere2() {
 		return putere2;
 	}
 
-	 void setputere2(int putere2) {
-		 if (putere2 > 0) {
-			 this->putere2 = putere2;
-		 }
-	 }
-	
-	
+	void setputere2(int putere2) {
+		if (putere2 > 0) {
+			this->putere2 = putere2;
+		}
+	}
+
+
 	const int getid() {
 		return this->id;
 	}
@@ -233,7 +247,7 @@ public:
 	char* getproducator() {
 		return producator;
 	}
-	
+
 	void setproducator(char* prod) {
 		if (prod != NULL) {
 			delete[]producator;
@@ -314,6 +328,41 @@ public:
 	}
 	friend float kilowati(int putere);
 	friend float puterePerPiston(int putere2, int numarPistoane);
+
+	friend ostream& operator<<(ostream& motor, const Motor& m) {
+		motor << "Producatorul este: " << m.producator << endl;
+		motor << "Numarul de pistoane: " << m.numarPistoane << endl;
+		motor << "Capacitatea este de: " << m.capacitate << " centimetri cubi." << endl;
+		/*motor << "Este electric (0-Nu, 1-Da): " << m.esteElectric << endl;*/
+		motor << (m.esteElectric ? "Este pe combustibil." : "Este electric.") << endl;
+		motor << "Are o putere de: " << m.putere << " cai putere." << endl;
+		motor << "Combustibil: " << m.combustibil << endl;
+		return motor;
+	}
+
+	friend istream& operator>>(istream& componente, Motor& c) {
+		char aux[100];
+		cout << "Producatorul motorului este: ";
+		componente>> aux;
+		if (c.producator != NULL) {
+			delete[]c.producator;
+		}
+		c.producator = new char[strlen(aux) + 1];
+		strcpy_s(c.producator, strlen(aux) + 1, aux);
+		cout << "Numarul de pistoane: ";
+		componente >> c.numarPistoane;
+		cout << "Capacitatea clinidrica este: ";
+		componente >> c.capacitate;
+		cout << "Este electric(0-Nu,1-Da):";
+		componente >> c.esteElectric;
+		cout << "Are o putere de: ";
+		componente >> c.putere;
+		cout << "Tipul combustibilului: ";
+		componente >> c.combustibil;
+		return componente;
+	}
+
+	
 };
 bool Motor::esteElectric = 0;
 //functie globala
@@ -366,7 +415,7 @@ public:
 	void afisareF() {
 		cout << "ID: " << id << " Sistemul de franare al masinii este compus din placutele marca " << marca << " , avand o dimensiune de " << dimensiunePlacuta << " cm, pe puntea spate fiind" << (this->tambur ? " , tambur," : " , tot placute,") << " cu un numar de " << numarPlacute << " placute in total, fiind fabricate din " << materialPlacute << "." << endl;
 	}
-    //get si set;
+	//get si set;
 	/*const int id;
 	bool tambur;
 	float dimensiunePlacuta;
@@ -454,9 +503,42 @@ public:
 		this->marca = new char[strlen(f.marca) + 1];
 		strcpy(this->marca, f.marca);
 	}
-	
+
 	friend int calculeazaNumarPlacute(sistemFranare& sistem);
 	friend string temperaturaOptima(int temperaturaOptimaFranare);
+
+	friend ostream& operator<<(ostream& sistem, const sistemFranare& s) {
+		cout << "Producatorul sistemului de franare este: " << s.marca << endl;
+		cout << (s.tambur ? "Are placute pe puntea spate." : "Are tambur pe punte spate.") << endl;
+		cout << "Dimensiune placuta: " << s.dimensiunePlacuta<<" centimetri."<<endl;
+		cout << "Numar placute: " << s.numarPlacute<<endl;
+		cout << "Material placute: " << s.materialPlacute << endl;
+		cout << "Temperatura optima de franare este: " << s.temperaturaOptimaFranare << " grade celsius." << endl;
+		return sistem;
+	}
+
+	friend istream& operator>>(istream& franare, sistemFranare& f) {
+		char aux[100];
+		cout << "Producatorul sistemului de franare este: ";
+		franare >> aux;
+		if (f.marca != NULL) {
+			delete[]f.marca;
+		}
+		f.marca = new char[strlen(aux) + 1];
+		strcpy_s(f.marca, strlen(aux) + 1, aux);
+		cout << "Are tambur pe puntea spate(0-Nu, 1-Da): ";
+		franare >> f.tambur;
+		cout << "Dimensiune placuta (cm): ";
+		franare >> f.dimensiunePlacuta;
+		cout << "Numar placute: ";
+		franare >> f.numarPlacute;
+		cout << "Material placute: ";
+		franare >> f.materialPlacute;
+		cout << "Temperatura optima de franare (grade celsius): ";
+		franare >> f.temperaturaOptimaFranare;
+		return franare;
+	}
+
 };
 int sistemFranare::numarPlacute = 0;
 //functie globala
@@ -479,7 +561,7 @@ string temperaturaOptima(int temperaturaOptimaFranare) {
 		return "Placutele sunt fabricate din ceramica!";
 	}
 	else {
-		return "Placutel sunt fabricate din metal";
+		return "Placutele sunt fabricate din metal";
 	}
 
 
@@ -503,7 +585,7 @@ void main() {
 	cout << " " << endl;
 
 	cutieViteze1.setesteAutomata(false);
-	cout << "Manuala(0)/Automata(1): "<< cutieViteze1.getesteAutomata() << endl;
+	cout << "Manuala(0)/Automata(1): " << cutieViteze1.getesteAutomata() << endl;
 
 	cutieViteze1.setnrRapoarte(8);
 	cout << "Numar rapoarte: " << cutieViteze1.getnrRapoarte() << endl;
@@ -525,6 +607,9 @@ void main() {
 
 	string masinasaucamion = masinaSauCamion(cutieViteze1.getnrRapoarte());
 	cout << masinasaucamion << endl;
+
+
+
 
 	cout << " " << endl;
 	//motor
@@ -559,14 +644,14 @@ void main() {
 
 	motor1.setputere2(240);
 	cout << "Putere2: " << motor1.getputere2() << endl;
-	
+
 	int putere = motor1.getputere();
 	float putereKW = kilowati(putere);
 	cout << "Putere in kilowati ora: " << putereKW << " kW" << endl;
-	
+
 	int putere2 = motor1.getputere2();
 	int numarPistoane = motor1.getnumarPistoane();
-	float puterePiston = puterePerPiston(putere2,numarPistoane);
+	float puterePiston = puterePerPiston(putere2, numarPistoane);
 	cout << "Putere per piston: " << puterePiston << " cp" << endl;
 
 	cout << " " << endl;
@@ -607,10 +692,39 @@ void main() {
 	cout << "Temperatura optima de franare este de: " << sistem1.gettemperatura() << " grade celsius." << endl;
 
 	int existaNumarPlacute = calculeazaNumarPlacute(sistem1);
-	cout << "Numar placute pe toata masina: "<<existaNumarPlacute << endl;//daca rezultatul este 8, inseamna ca masina nu are tamburi, adica are 2 placute pe roata * 4 roti, iar daca rezultatul este 4, masina are tamburi, iar numarul de placute pe roata este 2 * 2 numarul de roti
+	cout << "Numar placute pe toata masina: " << existaNumarPlacute << endl;//daca rezultatul este 8, inseamna ca masina nu are tamburi, adica are 2 placute pe roata * 4 roti, iar daca rezultatul este 4, masina are tamburi, iar numarul de placute pe roata este 2 * 2 numarul de roti
 
 	string temperatura = temperaturaOptima(sistem1.gettemperatura());
 	cout << temperatura << endl;
+	//operatori cutieViteze:
+	cout << " " << endl;
+	cout << "Operatorul<<" << endl;
+	cout << cutieViteze1;
 
+	cout << " " << endl;
+	cout << "Operatorul>>" << endl;
+	cin >> cutieViteze1;
 
+	cout << " " << endl;
+	cout << "Operatorul index" << endl;
+	cout << cutieViteze1[1];
+
+	//operatori Motor:
+	cout << " " << endl;
+	cout << "Operatorul<<" << endl;
+	cout << motor1;
+
+	cout << " " << endl;
+	cout << "Operatorul>>" << endl;
+	cin >> motor1;
+
+	//operatori sistemFranare:
+
+	cout << " " << endl;
+	cout << "Operatorul<<" << endl;
+	cout << sistem1;
+
+	cout << " " << endl;
+	cout << "Operatorul>>" << endl;
+	cin >> sistem1;
 }
