@@ -48,6 +48,8 @@ public:
 	};
 	//get si set;
 
+
+
 	const int getid() {
 		return this->id;
 	}
@@ -133,7 +135,7 @@ public:
 		}
 		c.producator = new char[strlen(aux) + 1];
 		strcpy_s(c.producator, strlen(aux) + 1, aux);
-		cout << "Ulei cutie: ";
+		cout << "Ulei cutie (litri): ";
 		masina >> c.uleiCutie;
 		cout << "Numar rapoarte: ";
 		masina >> c.nrRapoarte;
@@ -157,13 +159,19 @@ public:
 		cutie << (s.esteAutomata ? "Este automata. " : "Este manuala. ") << endl;
 		return cutie;
 	}
-
-	int& operator[](int index) {
-		if (index >= 0 && index < this->nrRapoarte) {
-			return this->nrRapoarte;
-		}
-		else throw 404;
+	
+	cutieViteze operator+ (const cutieViteze& rapoarte) {
+		cutieViteze aux = *this;
+		aux.nrRapoarte += rapoarte.nrRapoarte;
+		return aux;
 	}
+	
+	cutieViteze operator+=(const cutieViteze& k) {
+		this->nrRapoarte += k.nrRapoarte;
+		return *this;
+	}
+	
+	
 };
 bool cutieViteze::areMarsarier = true;
 
@@ -194,6 +202,7 @@ private:
 	static bool esteElectric;
 	int putere;
 	int putere2;
+	int* putere3;
 	string combustibil;
 public:
 	Motor() :id(1), capacitate(1.6), putere(112) {
@@ -223,7 +232,7 @@ public:
 	}
 
 	void afisareM() {
-		cout << "ID: " << id << " Motorul produs de " << producator << " are o capacitate de " << capacitate << " litri, o putere de " << putere << " cai putere, avand drept combustibil " << combustibil << (this->esteElectric ? " este electric" : " nu este electric") << " si avand un numar de " << numarPistoane << " pistoane." << endl;
+		cout << "ID: " << id << " Motorul produs de " << producator << " are o capacitate de " << capacitate << " litri, o putere de " << putere << " cai putere, avand drept combustibil " << combustibil << (this->esteElectric ? " Nu este electric" : " Este electric") << " si avand un numar de " << numarPistoane << " pistoane." << endl;
 	}
 	//get si set;
 	
@@ -361,8 +370,17 @@ public:
 		componente >> c.combustibil;
 		return componente;
 	}
-
 	
+	Motor operator+(const Motor& a) {
+		Motor aux = *this;
+		aux.putere += a.putere;
+		return aux;
+	}
+	
+	Motor operator+=(const Motor& b) {
+		this->putere += b.putere;
+		return *this;
+	}
 };
 bool Motor::esteElectric = 0;
 //functie globala
@@ -539,6 +557,16 @@ public:
 		return franare;
 	}
 
+	sistemFranare operator+(const sistemFranare& l) {
+		sistemFranare aux = *this;
+		this->dimensiunePlacuta += l.dimensiunePlacuta;
+		return aux;
+	}
+
+	sistemFranare operator+=(const sistemFranare& n) {
+		this->dimensiunePlacuta += n.dimensiunePlacuta;
+		return *this;
+	}
 };
 int sistemFranare::numarPlacute = 0;
 //functie globala
@@ -602,6 +630,10 @@ void main() {
 	cutieViteze1.setProducator(prod);
 	cout << "Producator: " << cutieViteze1.getProducator() << endl;
 
+	cout << " " << endl;
+	cout << "Functii globale " << endl;
+	cout << " " << endl;
+
 	string mesaj = masinaSauUtilaj(cutieViteze1.getareMarsarier());
 	cout << mesaj << endl;
 
@@ -624,7 +656,7 @@ void main() {
 
 	cout << " " << endl;
 
-	motor1.setcapacitate(2.5);
+	motor1.setcapacitate(2500);
 	cout << "Capacitatea motorului este: " << motor1.getcapacitate() << endl;
 
 	motor1.setcombustibil("benzina");
@@ -644,6 +676,10 @@ void main() {
 
 	motor1.setputere2(240);
 	cout << "Putere2: " << motor1.getputere2() << endl;
+
+	cout << " " << endl;
+	cout << "Functii globale " << endl;
+	cout << " " << endl;
 
 	int putere = motor1.getputere();
 	float putereKW = kilowati(putere);
@@ -691,40 +727,70 @@ void main() {
 	sistem1.settempertatura(160);
 	cout << "Temperatura optima de franare este de: " << sistem1.gettemperatura() << " grade celsius." << endl;
 
+	cout << " " << endl;
+	cout << "Functii globale " << endl;
+	cout << " " << endl;
+
 	int existaNumarPlacute = calculeazaNumarPlacute(sistem1);
 	cout << "Numar placute pe toata masina: " << existaNumarPlacute << endl;//daca rezultatul este 8, inseamna ca masina nu are tamburi, adica are 2 placute pe roata * 4 roti, iar daca rezultatul este 4, masina are tamburi, iar numarul de placute pe roata este 2 * 2 numarul de roti
 
 	string temperatura = temperaturaOptima(sistem1.gettemperatura());
 	cout << temperatura << endl;
-	//operatori cutieViteze:
+	/*operatori cutieViteze:*/
 	cout << " " << endl;
-	cout << "Operatorul<<" << endl;
+	cout << "Operatorul<< CUTIE" << endl;
 	cout << cutieViteze1;
 
 	cout << " " << endl;
-	cout << "Operatorul>>" << endl;
+	cout << "Operatorul>> CUTIE" << endl;
 	cin >> cutieViteze1;
 
 	cout << " " << endl;
-	cout << "Operatorul index" << endl;
-	cout << cutieViteze1[1];
+	cout << "Operatorul+ CUTIE" << endl;
+	cutieViteze rez = cutieViteze1 + cutieViteze2;
+	cout << "Suma rapoartelor celor doua cutii este: " << rez.getnrRapoarte() << endl;
+
+	cout << " " << endl;
+	cout << "Operatorul+= CUTIE" << endl;
+	cutieViteze3 += cutieViteze2;
+	cout << "Numarul rapoartelor dupa adunare: " << cutieViteze3.getnrRapoarte() << endl;
 
 	//operatori Motor:
 	cout << " " << endl;
-	cout << "Operatorul<<" << endl;
+	cout << "Operatorul<< MOTOR" << endl;
 	cout << motor1;
 
 	cout << " " << endl;
-	cout << "Operatorul>>" << endl;
+	cout << "Operatorul>> MOTOR" << endl;
 	cin >> motor1;
+
+	cout << " " << endl;
+	cout << "Operatorul+ MOTOR" << endl;
+	Motor rezultat = motor1 + motor2;
+	cout << "Suma puterilor celor doua motoare: " << rezultat.getputere() << " cai putere." << endl;
+
+	cout << " " << endl;
+	cout << "Operatorul+= MOTOR" << endl;
+	motor2 += motor3;
+	cout << "Puterea motorului dupa adunare: " << motor2.getputere()<<" cai putere." << endl;
 
 	//operatori sistemFranare:
 
 	cout << " " << endl;
-	cout << "Operatorul<<" << endl;
+	cout << "Operatorul<< FRANARE" << endl;
 	cout << sistem1;
 
 	cout << " " << endl;
-	cout << "Operatorul>>" << endl;
+	cout << "Operatorul>> FRANARE" << endl;
 	cin >> sistem1;
+
+	cout << " " << endl;
+	cout << "Operatorul+ FRANARE" << endl;
+	sistemFranare rezultatt = sistem2 + sistem1;
+	cout << "Rezultatul adunarii celor doua dimensiuni ale placutelor este: " << rezultatt.getdimensiunePlacuta() << " centimetri." << endl;
+
+	cout << " " << endl;
+	cout << "Operatorul+= FRANARE" << endl;
+	sistem3 += sistem1;
+	cout << "Dimensiunea dupa adunare: " << sistem3.getdimensiunePlacuta() << endl;
 }
