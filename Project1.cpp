@@ -171,6 +171,18 @@ public:
 		return *this;
 	}
 	
+	cutieViteze& operator=(const cutieViteze& aux) {
+		delete[]producator;
+		this->producator = new char[strlen(aux.producator) + 1];
+		strcpy(this->producator, aux.producator);
+		nrRapoarte = aux.nrRapoarte;
+		tipAmbreiaj = aux.tipAmbreiaj;
+		areMarsarier = aux.areMarsarier;
+		esteAutomata = aux.esteAutomata;
+		uleiCutie = aux.uleiCutie;
+
+		return *this;
+	}
 	
 };
 bool cutieViteze::areMarsarier = true;
@@ -202,7 +214,6 @@ private:
 	static bool esteElectric;
 	int putere;
 	int putere2;
-	int* putere3;
 	string combustibil;
 public:
 	Motor() :id(1), capacitate(1.6), putere(112) {
@@ -232,7 +243,7 @@ public:
 	}
 
 	void afisareM() {
-		cout << "ID: " << id << " Motorul produs de " << producator << " are o capacitate de " << capacitate << " litri, o putere de " << putere << " cai putere, avand drept combustibil " << combustibil << (this->esteElectric ? " Nu este electric" : " Este electric") << " si avand un numar de " << numarPistoane << " pistoane." << endl;
+		cout << "ID: " << id << " Motorul produs de " << producator << " are o capacitate de " << capacitate << " litri, o putere de " << putere << " cai putere, avand drept combustibil " << combustibil << (this->esteElectric ? " este electric/hibrid" : " nu este electric") << " si avand un numar de " << numarPistoane << " pistoane." << endl;
 	}
 	//get si set;
 	
@@ -381,6 +392,21 @@ public:
 		this->putere += b.putere;
 		return *this;
 	}
+
+	Motor& operator=(const Motor& aux) {
+		delete[]producator;
+		producator = new char[strlen(aux.producator) + 1];
+		strcpy(this->producator, aux.producator);
+		putere = aux.putere;
+		numarPistoane = aux.numarPistoane;
+		combustibil = aux.combustibil;
+		esteElectric = aux.esteElectric;
+		capacitate = aux.capacitate;
+
+		return *this;
+
+	}
+
 };
 bool Motor::esteElectric = 0;
 //functie globala
@@ -434,12 +460,6 @@ public:
 		cout << "ID: " << id << " Sistemul de franare al masinii este compus din placutele marca " << marca << " , avand o dimensiune de " << dimensiunePlacuta << " cm, pe puntea spate fiind" << (this->tambur ? " , tambur," : " , tot placute,") << " cu un numar de " << numarPlacute << " placute in total, fiind fabricate din " << materialPlacute << "." << endl;
 	}
 	//get si set;
-	/*const int id;
-	bool tambur;
-	float dimensiunePlacuta;
-	char* marca;
-	static int numarPlacute;
-	string materialPlacute;*/
 
 	int gettemperatura() {
 		return temperaturaOptimaFranare;
@@ -507,18 +527,13 @@ public:
 	}
 
 	//constructor de copiere;
-	/*const int id;
-	bool tambur;
-	float dimensiunePlacuta;
-	char* marca;
-	static int numarPlacute;
-	string materialPlacute;*/
 	sistemFranare(const sistemFranare& f) :id(f.id) {
 		this->tambur = f.tambur;
 		this->dimensiunePlacuta = f.dimensiunePlacuta;
 		this->numarPlacute = f.numarPlacute;
 		this->materialPlacute = f.materialPlacute;
 		this->marca = new char[strlen(f.marca) + 1];
+		this->temperaturaOptimaFranare = f.temperaturaOptimaFranare;
 		strcpy(this->marca, f.marca);
 	}
 
@@ -567,6 +582,20 @@ public:
 		this->dimensiunePlacuta += n.dimensiunePlacuta;
 		return *this;
 	}
+
+
+	sistemFranare& operator=(const sistemFranare& aux) {
+		delete[]marca;
+		marca = new char[strlen(aux.marca) + 1];
+		strcpy(this->marca, aux.marca);
+		dimensiunePlacuta = aux.dimensiunePlacuta;
+		temperaturaOptimaFranare = aux.temperaturaOptimaFranare;
+		tambur = aux.tambur;
+		materialPlacute = aux.materialPlacute;
+		numarPlacute = aux.numarPlacute;
+
+		return *this;
+	}
 };
 int sistemFranare::numarPlacute = 0;
 //functie globala
@@ -609,6 +638,13 @@ void main() {
 
 	cutieViteze cutieViteze3(3, 3.3, false, 7, "Mecanic");
 	cutieViteze3.afisare();
+
+	//Operatorul = cutie;
+	cout << " " << endl;
+	cout << "Operatorul= CUTIE" << endl;
+	cutieViteze cutieViteze4;
+	cutieViteze4 = cutieViteze1;
+	cutieViteze4.afisare();
 
 	cout << " " << endl;
 
@@ -653,6 +689,12 @@ void main() {
 
 	Motor motor3(3, 0, 500, "Energie", 0);
 	motor3.afisareM();
+
+	cout << "" << endl;
+	cout << "Operatorul= MOTOR" << endl;
+	Motor motor4;
+	motor4 = motor1;
+	motor4.afisareM();
 
 	cout << " " << endl;
 
@@ -707,6 +749,12 @@ void main() {
 	sistemFranare sistem3(3, 11.3, " ceramica", false);
 	sistem3.afisareF();
 
+	cout << "" << endl;
+	cout << "Operatorul= FRANARE" << endl;
+	sistemFranare sistem4;
+	sistem4 = sistem1;
+	sistem4.afisareF();
+
 	cout << " " << endl;
 
 	sistem1.setdimensiunePlacuta(10.3);
@@ -737,6 +785,8 @@ void main() {
 	string temperatura = temperaturaOptima(sistem1.gettemperatura());
 	cout << temperatura << endl;
 	/*operatori cutieViteze:*/
+	
+
 	cout << " " << endl;
 	cout << "Operatorul<< CUTIE" << endl;
 	cout << cutieViteze1;
@@ -754,6 +804,7 @@ void main() {
 	cout << "Operatorul+= CUTIE" << endl;
 	cutieViteze3 += cutieViteze2;
 	cout << "Numarul rapoartelor dupa adunare: " << cutieViteze3.getnrRapoarte() << endl;
+
 
 	//operatori Motor:
 	cout << " " << endl;
