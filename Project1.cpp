@@ -626,6 +626,31 @@ string temperaturaOptima(int temperaturaOptimaFranare) {
 		return "Placutele sunt fabricate din metal";
 	}
 }
+
+class masinaCutie {
+private:
+	int nrPlanetare;
+	string tipTractiune;
+	cutieViteze *cutie;
+public:
+	masinaCutie(){
+		this->nrPlanetare = 2;
+		this->tipTractiune = "tractiune fata";
+		this->cutie = new cutieViteze[2];
+	}
+	cutieViteze& operator[](int index) {
+		if (index >= 0 && index < this->nrPlanetare) {
+			return this->cutie[index];
+		}
+	}
+	~masinaCutie() {
+		if (this->cutie) {
+			delete[]this->cutie;
+		}
+	}
+
+};
+
 void main() {
 	char* prod;
 	prod = new char[strlen("Mercedes") + 1];
@@ -680,6 +705,33 @@ void main() {
 		cout << cutie[i] << endl << endl;
 	}
 	delete[]cutie;
+
+	cout << "=======Matrice=======" << endl << endl;
+	cutieViteze** matrice = new cutieViteze * [2];
+	for (int i = 0; i < 2; i++) {
+		matrice[i] = new cutieViteze[2];
+	}
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 2; j++) {
+			cout << matrice[i][j];
+		}
+
+	}
+		
+	for (int i = 0; i < 2; i++) {
+		delete[]matrice[i];
+	}
+	delete[]matrice;
+
+	//relatia has a
+	cout << "" << endl;
+	cout << "=================HAS A==================" << endl << endl;
+	masinaCutie masina;
+	cutieViteze cutie6;
+	cin >> cutie6;
+	masina[1] = cutie6;
+	cout << "" << endl;
+	cout << masina[1].getProducator() << endl;
 
 	cout << "========SET SI GET========" << endl;
 	cout << " " << endl;
@@ -830,15 +882,6 @@ void main() {
 	cout << "Dimensiunea dupa adunare: " << sistem3.getdimensiunePlacuta() << endl << endl;
 
 	cout << "=======Vector de obiecte=======" << endl << endl;
-	/*Motor* _motor = new Motor[3];
-	_motor[0] = motor1;
-	_motor[1] = motor2;
-	_motor[2] = motor3;
-	for (int i = 0; i < 3; i++) {
-		cout << _motor[i] << endl << endl;
-	}
-	delete[]_motor;*/
-
 	sistemFranare* _sistem = new sistemFranare[3];
 	_sistem[0] = sistem1;
 	_sistem[1] = sistem2;
@@ -875,4 +918,5 @@ void main() {
 
 	string temperatura = temperaturaOptima(sistem1.gettemperatura());
 	cout << temperatura << endl << endl;
+
 }
