@@ -633,20 +633,66 @@ private:
 	string tipTractiune;
 	cutieViteze *cutie;
 public:
+	//constructori
 	masinaCutie(){
 		this->nrPlanetare = 2;
-		this->tipTractiune = "tractiune fata";
+		this->tipTractiune = " fata";
 		this->cutie = new cutieViteze[2];
 	}
+	masinaCutie(int _nrPlanetare, string _tipTractiune) :nrPlanetare(_nrPlanetare), tipTractiune(_tipTractiune) {
+		this->cutie = new cutieViteze[2];
+	}
+	//operator index
 	cutieViteze& operator[](int index) {
 		if (index >= 0 && index < this->nrPlanetare) {
 			return this->cutie[index];
 		}
 	}
+	//destructor
 	~masinaCutie() {
 		if (this->cutie) {
 			delete[]this->cutie;
 		}
+	}
+	//afisare
+	void afisareC() {
+		cout << "Masina are un numar de " << nrPlanetare << " planetare, avand tractiune " << tipTractiune << "." << endl << endl;
+	}
+	//get si set
+	int getPlanetare() {
+		return nrPlanetare;
+	}
+	void setPlanetare(int planetare) {
+		this->nrPlanetare = planetare;
+	}
+	
+	string getTractiune() {
+		return tipTractiune;
+	}
+	void setTractiune(string tractiune) {
+		if (tractiune.length() > 0) {
+			this->tipTractiune = tractiune;
+		}
+	}
+	//operator<<
+	friend ostream& operator<<(ostream& out, const masinaCutie& m) {
+		out << "Numar planetare: " << m.nrPlanetare << endl;
+		out << "Tip tractiune: " << m.tipTractiune<<endl;
+		return out;
+	}
+	//operator>>
+	friend istream& operator>>(istream& in, masinaCutie& p) {
+		cout << "Numar planetare: ";
+		in >> p.nrPlanetare;
+		cout << "Tip tractiune: ";
+		in >> p.tipTractiune;
+		return in;
+	}
+	//operator+
+	masinaCutie& operator+(const masinaCutie& s) {
+		masinaCutie aux = *this;
+		this->nrPlanetare = s.nrPlanetare;
+		return aux;
 	}
 
 };
@@ -727,11 +773,29 @@ void main() {
 	cout << "" << endl;
 	cout << "=================HAS A==================" << endl << endl;
 	masinaCutie masina;
+	masinaCutie masina2(2,"spate");
+	masina.afisareC();
+	masina2.afisareC();
+	masina2.setPlanetare(2);
+
 	cutieViteze cutie6;
 	cin >> cutie6;
 	masina[1] = cutie6;
 	cout << "" << endl;
 	cout << masina[1].getProducator() << endl;
+
+	cout << "=============Operator<<============" << endl;
+	cout << masina2;
+
+	cout << " " << endl;
+	cout << "========Operator+========" << endl;
+	masinaCutie totalPlanetare = masina + masina2;
+	cout << "Numar total de planetare al celor 2 masini: " << totalPlanetare.getPlanetare() << endl << endl;
+
+	cout << "=============Operator>>============" << endl;
+	cin >> masina;
+
+	
 
 	cout << "========SET SI GET========" << endl;
 	cout << " " << endl;
