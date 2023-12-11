@@ -1,5 +1,8 @@
 #include<iostream>
+#include<fstream>
+#include<string>
 #pragma warning (disable:4996)
+
 
 using namespace std;
 
@@ -184,8 +187,16 @@ public:
 	friend string masinaSauUtilaj(bool areMarsarier);
 	friend string masinaSauCamion(int nrRapoarte);
 
+	//fisier text
+	friend ofstream& operator<<(ofstream& fisier, const cutieViteze& cutie) {
+		fisier << cutie.producator << endl << cutie.nrRapoarte << endl << cutie.uleiCutie << endl;
+		fisier << endl;
+		return fisier;
+	}
+
 };
 bool cutieViteze::areMarsarier = true;
+
 
 string masinaSauUtilaj(bool areMarsarier) {
 	if (areMarsarier) {
@@ -400,6 +411,13 @@ public:
 	Motor operator+=(const Motor& b) {
 		this->putere += b.putere;
 		return *this;
+	}
+
+	//fisier text
+	friend ofstream& operator<<(ofstream& fis, const Motor& motor) {
+		fis << motor.producator << endl << motor.capacitate << endl << motor.putere << endl;
+		fis << endl;
+		return fis;
 	}
 };
 bool Motor::esteElectric = 0;
@@ -631,10 +649,10 @@ class masinaCutie {
 private:
 	int nrPlanetare;
 	string tipTractiune;
-	cutieViteze *cutie;
+	cutieViteze* cutie;
 public:
 	//constructori
-	masinaCutie(){
+	masinaCutie() {
 		this->nrPlanetare = 2;
 		this->tipTractiune = " fata";
 		this->cutie = new cutieViteze[2];
@@ -665,7 +683,7 @@ public:
 	void setPlanetare(int planetare) {
 		this->nrPlanetare = planetare;
 	}
-	
+
 	string getTractiune() {
 		return tipTractiune;
 	}
@@ -677,7 +695,7 @@ public:
 	//operator<<
 	friend ostream& operator<<(ostream& out, const masinaCutie& m) {
 		out << "Numar planetare: " << m.nrPlanetare << endl;
-		out << "Tip tractiune: " << m.tipTractiune<<endl;
+		out << "Tip tractiune: " << m.tipTractiune << endl;
 		return out;
 	}
 	//operator>>
@@ -715,6 +733,11 @@ void main() {
 	cout << "======Constructor de copiere=======" << endl;
 	cutieViteze cutieViteze4 = cutieViteze2;
 	cutieViteze4.afisare();
+
+	//fisier text
+	ofstream g("CutieViteze.txt", ios::app);
+	g << cutieViteze1;
+	g.close();
 
 	//operator=
 	cout << "" << endl;
@@ -763,7 +786,7 @@ void main() {
 		}
 
 	}
-		
+
 	for (int i = 0; i < 2; i++) {
 		delete[]matrice[i];
 	}
@@ -773,7 +796,7 @@ void main() {
 	cout << "" << endl;
 	cout << "=================HAS A==================" << endl << endl;
 	masinaCutie masina;
-	masinaCutie masina2(2,"spate");
+	masinaCutie masina2(2, "spate");
 	masina.afisareC();
 	masina2.afisareC();
 	masina2.setPlanetare(2);
@@ -794,8 +817,6 @@ void main() {
 
 	cout << "=============Operator>>============" << endl;
 	cin >> masina;
-
-	
 
 	cout << "========SET SI GET========" << endl;
 	cout << " " << endl;
@@ -840,6 +861,11 @@ void main() {
 	cout << "======Constructor de copiere=======" << endl;
 	Motor motor4 = motor3;
 	motor4.afisareM();
+
+	//fisier text
+	ofstream f("Motor.txt", ios::app);
+	f << motor1;
+	f.close();
 
 	//operator=
 	cout << "" << endl;
