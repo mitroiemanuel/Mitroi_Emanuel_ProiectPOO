@@ -30,9 +30,9 @@ public:
 
 	cutieViteze(int idNou, float uleiCutieNou) :id(idNou), uleiCutie(uleiCutieNou) {
 		esteAutomata = true;
-		producator = new char[strlen("Opel") + 1];
-		strcpy_s(producator, strlen("Opel") + 1, "Opel");
-		tipAmbreiaj = "mecanic";
+		producator = new char[strlen("Volkswagen") + 1];
+		strcpy_s(producator, strlen("Volkswagen") + 1, "Volkswagen");
+		tipAmbreiaj = "hidraulic";
 		nrRapoarte = 7;
 	}
 
@@ -221,7 +221,7 @@ private:
 	const int id;
 	int numarPistoane;
 	int putere;
-	int putere2;
+	int putere2=0;
 	char* producator;
 	static bool esteElectric;
 	float capacitate;
@@ -438,7 +438,7 @@ float puterePerPiston(int putere2, int numarPistoane) {
 class sistemFranare {
 private:
 	const int id;
-	int temperaturaOptimaFranare;
+	int temperaturaOptimaFranare=0;
 	static int numarPlacute;
 	float dimensiunePlacuta;
 	bool tambur;
@@ -619,6 +619,18 @@ public:
 		return *this;
 	}
 
+	//fisier binar
+	/*void scrierefBinar(fstream& f) {
+		f.write((char*)&this->dimensiunePlacuta, sizeof(float));
+		f.write((char*)&this->materialPlacute, sizeof(string));
+		f.write((char*)&this->tambur, sizeof(bool));
+	}
+	void citirefBinar(fstream& f) {
+		f.read((char*)&this->dimensiunePlacuta, sizeof(float));
+		f.read((char*)&this->materialPlacute, sizeof(string));
+		f.read((char*)&this->tambur, sizeof(bool));
+	}*/
+
 };
 int sistemFranare::numarPlacute = 0;
 //functii globale
@@ -645,76 +657,137 @@ string temperaturaOptima(int temperaturaOptimaFranare) {
 	}
 }
 
-class masinaCutie {
+//class masinaCutie {
+//private:
+//	int nrPlanetare;
+//	string tipTractiune;
+//	cutieViteze* cutie;
+//public:
+//	//constructori
+//	masinaCutie() {
+//		this->nrPlanetare = 2;
+//		this->tipTractiune = " fata";
+//		this->cutie = new cutieViteze[2];
+//	}
+//	masinaCutie(int _nrPlanetare, string _tipTractiune) :nrPlanetare(_nrPlanetare), tipTractiune(_tipTractiune) {
+//		this->cutie = new cutieViteze[2];
+//	}
+//	//operator index
+//	cutieViteze& operator[](int index) {
+//		if (index >= 0 && index < this->nrPlanetare) {
+//			return this->cutie[index];
+//		}
+//	}
+//	//destructor
+//	~masinaCutie() {
+//		if (this->cutie) {
+//			delete[]this->cutie;
+//		}
+//	}
+//	//afisare
+//	void afisareC() {
+//		cout << "Masina are un numar de " << nrPlanetare << " planetare, avand tractiune " << tipTractiune << "." << endl << endl;
+//	}
+//	//get si set
+//	int getPlanetare() {
+//		return nrPlanetare;
+//	}
+//	void setPlanetare(int planetare) {
+//		this->nrPlanetare = planetare;
+//	}
+//
+//	string getTractiune() {
+//		return tipTractiune;
+//	}
+//	void setTractiune(string tractiune) {
+//		if (tractiune.length() > 0) {
+//			this->tipTractiune = tractiune;
+//		}
+//	}
+//	//operator<<
+//	friend ostream& operator<<(ostream& out, const masinaCutie& m) {
+//		out << "Numar planetare: " << m.nrPlanetare << endl;
+//		out << "Tip tractiune: " << m.tipTractiune << endl;
+//		return out;
+//	}
+//	//operator>>
+//	friend istream& operator>>(istream& in, masinaCutie& p) {
+//		cout << "Numar planetare: ";
+//		in >> p.nrPlanetare;
+//		cout << "Tip tractiune: ";
+//		in >> p.tipTractiune;
+//		return in;
+//	}
+//	//operator+
+//	masinaCutie& operator+(const masinaCutie& s) {
+//		masinaCutie aux = *this;
+//		this->nrPlanetare = s.nrPlanetare;
+//		return aux;
+//	}
+//
+//};
+
+class cutieAutomata : public cutieViteze {
 private:
-	int nrPlanetare;
-	string tipTractiune;
-	cutieViteze* cutie;
+	string tipCutie;
+	int nrKmRevizie;
+	string tipUlei;
 public:
 	//constructori
-	masinaCutie() {
-		this->nrPlanetare = 2;
-		this->tipTractiune = " fata";
-		this->cutie = new cutieViteze[2];
+	cutieAutomata() : cutieViteze() {
+		this->tipCutie = "EDC";
+		this->nrKmRevizie = 60000;
+		this->tipUlei = "75W80";
 	}
-	masinaCutie(int _nrPlanetare, string _tipTractiune) :nrPlanetare(_nrPlanetare), tipTractiune(_tipTractiune) {
-		this->cutie = new cutieViteze[2];
+	cutieAutomata(string _tipCutie, int _nrKmRevizie, string _tipUlei) :cutieViteze(1, 2.9) {
+		this->tipCutie = _tipCutie;
+		this->nrKmRevizie = _nrKmRevizie;
+		this->tipUlei = _tipUlei;
 	}
-	//operator index
-	cutieViteze& operator[](int index) {
-		if (index >= 0 && index < this->nrPlanetare) {
-			return this->cutie[index];
-		}
-	}
-	//destructor
-	~masinaCutie() {
-		if (this->cutie) {
-			delete[]this->cutie;
-		}
-	}
-	//afisare
-	void afisareC() {
-		cout << "Masina are un numar de " << nrPlanetare << " planetare, avand tractiune " << tipTractiune << "." << endl << endl;
-	}
-	//get si set
-	int getPlanetare() {
-		return nrPlanetare;
-	}
-	void setPlanetare(int planetare) {
-		this->nrPlanetare = planetare;
-	}
-
-	string getTractiune() {
-		return tipTractiune;
-	}
-	void setTractiune(string tractiune) {
-		if (tractiune.length() > 0) {
-			this->tipTractiune = tractiune;
+	//constructor de copiere
+	cutieAutomata(const cutieAutomata& c) :cutieViteze(c) {
+		if (this != &c) {
+			cutieViteze::operator=(c);
+			this->tipCutie = c.tipCutie;
+			this->nrKmRevizie = c.nrKmRevizie;
+			this->tipUlei = c.tipUlei;
 		}
 	}
 	//operator<<
-	friend ostream& operator<<(ostream& out, const masinaCutie& m) {
-		out << "Numar planetare: " << m.nrPlanetare << endl;
-		out << "Tip tractiune: " << m.tipTractiune << endl;
+	friend ostream& operator << (ostream & out, const cutieAutomata & cutie) {
+		out << "Tip cutie: " << cutie.tipCutie << endl << "Numar kilometri pana la revizie: " << cutie.nrKmRevizie << endl << "Tip ulei: " << cutie.tipUlei << endl << endl;
+		out << (cutieViteze)cutie;
 		return out;
 	}
-	//operator>>
-	friend istream& operator>>(istream& in, masinaCutie& p) {
-		cout << "Numar planetare: ";
-		in >> p.nrPlanetare;
-		cout << "Tip tractiune: ";
-		in >> p.tipTractiune;
-		return in;
+	//set si get
+	int getRevizie() {
+		return nrKmRevizie;
 	}
-	//operator+
-	masinaCutie& operator+(const masinaCutie& s) {
-		masinaCutie aux = *this;
-		this->nrPlanetare = s.nrPlanetare;
-		return aux;
+	void setRevizie(int km) {
+		if (km != 0) {
+			this->nrKmRevizie = km;
+		}
+	}
+
+	string getTipUlei() {
+		return tipUlei;
+	}
+	void setTipUlei(string ulei) {
+		if (ulei.length() > 0) {
+			this->tipUlei = ulei;
+		}
+	}
+
+	string getTipCutie() {
+		return tipCutie;
+	}
+	void setTipCutie(string tipC) {
+		if (tipC.length() > 0) {
+			this->tipCutie = tipC;
+		}
 	}
 
 };
-
 void main() {
 	char* prod;
 	prod = new char[strlen("Mercedes") + 1];
@@ -792,33 +865,33 @@ void main() {
 	}
 	delete[]matrice;
 
-	//relatia has a
-	cout << "" << endl;
-	cout << "=================HAS A==================" << endl << endl;
-	masinaCutie masina;
-	masinaCutie masina2(2, "spate");
-	masina.afisareC();
-	masina2.afisareC();
-	masina2.setPlanetare(2);
+	////relatia has a
+	//cout << "" << endl;
+	//cout << "=================HAS A==================" << endl << endl;
+	//masinaCutie masina;
+	//masinaCutie masina2(2, "spate");
+	//masina.afisareC();
+	//masina2.afisareC();
+	//masina2.setPlanetare(2);
 
-	cutieViteze cutie6;
-	cin >> cutie6;
-	masina[1] = cutie6;
-	cout << "" << endl;
-	cout << masina[1].getProducator() << endl;
+	//cutieViteze cutie6;
+	//cin >> cutie6;
+	//masina[1] = cutie6;
+	//cout << "" << endl;
+	//cout << masina[1].getProducator() << endl;
 
-	cout << "=============Operator<<============" << endl;
-	cout << masina2;
+	//cout << "=============Operator<<============" << endl;
+	//cout << masina2;
 
-	cout << " " << endl;
-	cout << "========Operator+========" << endl;
-	masinaCutie totalPlanetare = masina + masina2;
-	cout << "Numar total de planetare al celor 2 masini: " << totalPlanetare.getPlanetare() << endl << endl;
+	//cout << " " << endl;
+	//cout << "========Operator+========" << endl;
+	//masinaCutie totalPlanetare = masina + masina2;
+	//cout << "Numar total de planetare al celor 2 masini: " << totalPlanetare.getPlanetare() << endl << endl;
 
-	cout << "=============Operator>>============" << endl;
-	cin >> masina;
+	//cout << "=============Operator>>============" << endl;
+	//cin >> masina;
 
-	cout << "========SET SI GET========" << endl;
+	//cout << "========SET SI GET========" << endl;
 	cout << " " << endl;
 
 	cutieViteze1.setesteAutomata(false);
@@ -942,6 +1015,7 @@ void main() {
 	sistemFranare sistem1;
 	sistemFranare sistem2(2, 10.5);
 	sistemFranare sistem3(3, 11.3, " ceramica", false);
+	sistemFranare sistem5(5, 10.1, " metal", true);
 	sistem1.afisareF();
 	sistem2.afisareF();
 	sistem3.afisareF();
@@ -950,6 +1024,20 @@ void main() {
 	sistemFranare sistem4;
 	sistem4 = sistem3;
 	sistem4.afisareF();
+
+	//fisier binar
+	/*fstream fisier("SistemFranare.txt", ios::out | ios::binary);
+	fisier.write((char*)&sistem1, sizeof(sistemFranare));
+	fisier.close();
+
+	fstream fis("SistemFranare.txt", ios::in | ios::binary);
+	fis.read((char*)&sistem5, sizeof(sistemFranare));
+	cout << sistem5;
+
+	sistem1.scrierefBinar(fisier);
+	fisier.close();
+	sistem2.citirefBinar(fis);
+	fis.close();*/
 
 	//operator=
 	cout << "" << endl;
@@ -1008,5 +1096,12 @@ void main() {
 
 	string temperatura = temperaturaOptima(sistem1.gettemperatura());
 	cout << temperatura << endl << endl;
+
+	cout << "=============RELATIE IS-A=========================" << endl;
+	cutieAutomata c1;
+	cutieAutomata c2("DSG", 80000, "70W75");
+
+	cutieAutomata c3 = c2;
+	cout << c2;
 
 }
