@@ -221,7 +221,7 @@ private:
 	const int id;
 	int numarPistoane;
 	int putere;
-	int putere2=0;
+	int putere2 = 0;
 	char* producator;
 	static bool esteElectric;
 	float capacitate;
@@ -438,7 +438,7 @@ float puterePerPiston(int putere2, int numarPistoane) {
 class sistemFranare {
 private:
 	const int id;
-	int temperaturaOptimaFranare=0;
+	int temperaturaOptimaFranare = 0;
 	static int numarPlacute;
 	float dimensiunePlacuta;
 	bool tambur;
@@ -727,6 +727,89 @@ string temperaturaOptima(int temperaturaOptimaFranare) {
 //
 //};
 
+class motorElectric : public Motor {
+private:
+	string producator;
+	string denumireMotor;
+	int caiPutere;
+	float consum;
+
+public:
+	//constructori
+	motorElectric() :Motor() {
+		producator = "Tesla";
+		denumireMotor = "DualMotors";
+		caiPutere = 800;
+		consum = 20.6;
+	}
+
+	motorElectric(string _denumire, int _cai, float _consum, string _producator) : Motor(1, 0, 650, "electric") {
+		producator = _producator;
+		denumireMotor = _denumire;
+		caiPutere = _cai;
+		consum = _consum;
+	}
+	//constructor de copiere
+	motorElectric(const motorElectric& m) :Motor(m) {
+		if (this != &m) {
+			Motor::operator+=(m);
+			this->caiPutere = m.caiPutere;
+			this->producator = m.producator;
+			this->denumireMotor = m.denumireMotor;
+			this->consum = m.consum;
+		}
+	}
+
+	//operator<<
+	friend ostream& operator<<(ostream& out, const motorElectric& motor) {
+		out << "Producator: " << motor.producator << endl << "Denumire motor: " << motor.denumireMotor << endl << "Cai putere: " << motor.caiPutere << endl << "Consum: " << motor.consum << endl;
+		out << (Motor)motor;
+		return out;
+	}
+
+	//get si set
+	int getCai() {
+		return caiPutere;
+	}
+	
+	void setCai(int cai) {
+		if (cai != 0) {
+			this->caiPutere = cai;
+		}
+	}
+
+	float getConsum() {
+		return consum;
+	}
+
+	void setConsum(float _consum) {
+		if (consum > 10) {
+			this->consum = _consum;
+		}
+	}
+
+	string getProducator() {
+		return producator;
+	}
+
+	void setProducator(string prod) {
+		if (prod.length() > 0) {
+			this->producator = prod;
+		}
+	}
+
+	string getDenumire() {
+		return denumireMotor;
+	}
+
+	void setDenumire(string denumire) {
+		if (denumire.length()> 0) {
+			this->denumireMotor = denumire;
+		}
+	}
+};
+
+
 class cutieAutomata : public cutieViteze {
 private:
 	string tipCutie;
@@ -754,7 +837,7 @@ public:
 		}
 	}
 	//operator<<
-	friend ostream& operator << (ostream & out, const cutieAutomata & cutie) {
+	friend ostream& operator << (ostream& out, const cutieAutomata& cutie) {
 		out << "Tip cutie: " << cutie.tipCutie << endl << "Numar kilometri pana la revizie: " << cutie.nrKmRevizie << endl << "Tip ulei: " << cutie.tipUlei << endl << endl;
 		out << (cutieViteze)cutie;
 		return out;
@@ -1103,5 +1186,18 @@ void main() {
 
 	cutieAutomata c3 = c2;
 	cout << c2;
+
+	cout << endl;
+
+	motorElectric m1;
+	motorElectric m2("Roadster", 1000, 21.8, "Tesla");
+
+	Motor m3 = m2;
+	m2.setCai(600);
+	m2.setProducator("Tesla");
+	m2.setConsum(21.8);
+	m2.setnumarPistoane(0);
+	cout <<"Cai putere: "<< m2.getCai() << endl<<"Producator: " << m2.getProducator() << endl<<"Consum (kWh): " << m2.getConsum() << endl;
+
 
 }
